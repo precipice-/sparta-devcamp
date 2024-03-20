@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 export const validationSchema = Joi.object({
   // ENV
-  RUNTIME: Joi.string().valid('local', 'test', 'prod').required(),
+  // RUNTIME: Joi.string().valid('local', 'test', 'prod').required(),
   PORT: Joi.number().required(),
   SERVICE_NAME: Joi.string().required(),
 
