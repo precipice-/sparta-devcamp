@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { validationSchema } from './config/validation.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         logging: configService.get<string>('RUNTIME') !== 'prod',
       }),
     }),
+    AuthModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
