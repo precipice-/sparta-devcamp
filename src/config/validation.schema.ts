@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 
 export const validationSchema = Joi.object({
   // ENV
@@ -7,16 +7,16 @@ export const validationSchema = Joi.object({
   SERVICE_NAME: Joi.string().required(),
 
   // BACKEND
-  BASE_URL: Joi.string().required(),
+  // BASE_URL: Joi.string().required(),
 
   // SWAGGER
-  SWAGGER_ID: Joi.string().required(),
-  SWAGGER_PW: Joi.string().required(),
+  //   SWAGGER_ID: Joi.string().required(),
+  //   SWAGGER_PW: Joi.string().required(),
 
   // AUTH
-  JWT_SECRET: Joi.string().required(),
-  ACCESS_TOKEN_EXPIRY: Joi.string().required(),
-  REFRESH_TOKEN_EXPIRY: Joi.string().required(),
+  //   JWT_SECRET: Joi.string().required(),
+  //   ACCESS_TOKEN_EXPIRY: Joi.string().required(),
+  //   REFRESH_TOKEN_EXPIRY: Joi.string().required(),
 
   // DB
   DB_HOST: Joi.string().required(),
