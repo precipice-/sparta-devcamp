@@ -9,3 +9,14 @@ export type RequestInfo = {
   ua: string;
   endpoint: string;
 };
+
+export type CreateTokenPayloadInput = {
+  sub: string;
+  iat: number;
+  jti: string;
+};
+
+export type CreateUserInput = {
+  name: string;
+  email: string;
+};
