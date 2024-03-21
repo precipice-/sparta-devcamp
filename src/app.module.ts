@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
-import { User } from './auth/entities';
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { User } from './auth/entities';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [User],
+        autoLoadEntities: true,
         synchronize: configService.get<boolean>('DB_SYNC'),
         logging: true,
       }),

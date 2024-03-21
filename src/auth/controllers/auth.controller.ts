@@ -1,11 +1,16 @@
+import { AuthService } from '../services/auth.service';
+import { LoginReqDto, LoginResDto, RefreshReqDto } from '../dto';
 import { SignupResDto } from '../dto/signup-res.dto';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from './../dto/create-user.dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto): Promise<SignupResDto> {
@@ -17,5 +22,29 @@ export class AuthController {
       phone: user.phone,
       password: user.password,
     };
+  }
+
+  @Post('login')
+  async login(
+    @Req() req,
+    @Body() loginReqDto: LoginReqDto,
+  ): Promise<LoginResDto> {
+    const { ip, method, originalUrl } = req;
+    const reqInfo = {
+      ip,
+      endpoint: `${method} ${originalUrl}`,
+      ua: req.headers['user-agent'] || '',
+    };
+
+    return this.authService.login(
+      loginReqDto.email,
+      loginReqDto.password,
+      reqInfo,
+    );
+  }
+
+  @Post('refresh')
+  async refresh(@Body() dto: RefreshReqDto): Promise<string> {
+    return this.authService.refreshAccessToken(dto.refreshToken);
   }
 }
