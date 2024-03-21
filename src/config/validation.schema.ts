@@ -14,9 +14,9 @@ export const validationSchema = Joi.object({
   //   SWAGGER_PW: Joi.string().required(),
 
   // AUTH
-  //   JWT_SECRET: Joi.string().required(),
-  //   ACCESS_TOKEN_EXPIRY: Joi.string().required(),
-  //   REFRESH_TOKEN_EXPIRY: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+  ACCESS_TOKEN_EXPIRY: Joi.string().required(),
+  REFRESH_TOKEN_EXPIRY: Joi.string().required(),
 
   // DB
   DB_HOST: Joi.string().required(),
