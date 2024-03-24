@@ -43,6 +43,21 @@ export class AuthController {
     );
   }
 
+  // @Get('logout')
+  // async logout(@Req() req): Promise<void> {
+  //   console.log(req.cookies);
+  //   const cookies = req.cookies;
+  //   const accessToken = cookies['accessToken'];
+  //   const refreshToken = cookies['refreshToken'];
+  //   console.log('accessToken', accessToken);
+  //   console.log('refreshToken', refreshToken);
+
+  //   return this.authService.logout(
+  //     `Bearer ${accessToken}`,
+  //     `Bearer ${refreshToken}`,
+  //   );
+  // }
+
   @Post('refresh')
   async refresh(@Body() dto: RefreshReqDto): Promise<string> {
     return this.authService.refreshAccessToken(dto.refreshToken);

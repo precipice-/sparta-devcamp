@@ -12,6 +12,7 @@ import {
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
+import { TokenBlacklistService } from './token-blacklist.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly accessTokenRepository: AccessTokenRepository,
     private readonly accessLogRepository: AccessLogRepository,
     private readonly jwtService: JwtService,
+    private readonly tokenBlacklistService: TokenBlacklistService,
   ) {}
 
   async login(
@@ -50,6 +52,33 @@ export class AuthService {
         phone: user.phone,
       },
     };
+  }
+
+  async logout(accessToken: string, refreshToken: string): Promise<void> {
+    console.log('service accesstoken', accessToken);
+    console.log('service refreshToken', refreshToken);
+    const [jtiAccess, jtiRefresh] = await Promise.all([
+      this.jwtService.verifyAsync(accessToken, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      }),
+      this.jwtService.verifyAsync(refreshToken, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      }),
+    ]);
+    await Promise.all([
+      this.addToBlacklist(
+        accessToken,
+        jtiAccess,
+        'access',
+        'ACCESS_TOKEN_EXPIRY',
+      ),
+      this.addToBlacklist(
+        refreshToken,
+        jtiRefresh,
+        'refresh',
+        'REFRESH_TOKEN_EXPIRY',
+      ),
+    ]);
   }
 
   private async validateUser(
@@ -123,6 +152,23 @@ export class AuthService {
     } catch (error) {
       throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  private async addToBlacklist(
+    token: string,
+    jti: string,
+    type: 'access' | 'refresh',
+    expiryConfigKey: string,
+  ): Promise<void> {
+    const expiryTime = this.calculateExpiry(
+      this.configService.get<string>(expiryConfigKey),
+    );
+    await this.tokenBlacklistService.addToBlacklist(
+      token,
+      jti,
+      type,
+      expiryTime,
+    );
   }
 
   private calculateExpiry(expiry: string): Date {
