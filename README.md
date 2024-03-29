@@ -1,19 +1,72 @@
-# Devcamp - first week project
+# Backend 회원가입, 로그인, 결제 기능 구현
 
-# 목적
+기본적인 회원가입, 로그인, 결제 기능을 NestJS로 빠르게 빌드해보면서 실력을 점검하는 프로젝트
 
-- 예시코드를 보며 로그인, 회원가입 비즈니스 로직을 습득합니다.
-- 예시코드의 Repository pattern을 익힙니다.
-- 토큰 블랙리스트 방식을 구현합니다.
+## Installation
 
-# 구현 기능
+```bash
+$ yarn install
+```
 
-- 로그인
-- 회원가입
-- 로그아웃
-- JWT 토큰 인증, 인가
-- JWT 토큰 블랙리스트 추가
+## Running the app
 
-# 기술 스택
+```bash
+# development
+$ yarn run start
 
-- Typescript, Nest.js, PostgreSQL, TypeORM
+# watch mode
+$ yarn run start:dev
+
+# production mode
+$ yarn run start:prod
+```
+
+## Test
+
+```bash
+# unit tests
+$ yarn run test
+
+# e2e tests
+$ yarn run test:e2e
+
+# test coverage
+$ yarn run test:cov
+```
+
+## 기술스택 🛠️
+
+- TypeScript + NestJS
+- Yarn
+- TypeORM + PostgreSQL
+
+## Payment Code Structure
+```plaintext
+src/payment
+├── payment.module.ts
+├── dto
+│   ├── index.ts
+│   └── create-order.dto.ts
+├── entities
+│   ├── coupon.entity.ts
+│   ├── issued-coupon.entity.ts
+│   ├── index.ts
+│   ├── order-item.entity.ts
+│   ├── order.entity.ts
+|   ├── product.entity.ts
+|   ├── point.entity.ts
+│   └── point-log.entity.ts
+├── repositories
+│   ├── coupon.repository.ts
+│   ├── issued-coupon.repository.ts
+│   ├── index.ts
+│   ├── order-item.repository.ts
+│   ├── order.repository.ts
+│   ├── product.repository.ts
+|   ├── point.repository.ts
+│   └── point-log.repository.ts
+└── services
+    ├── index.ts
+    ├── payment.service.ts
+    └── product.service.ts
+```
