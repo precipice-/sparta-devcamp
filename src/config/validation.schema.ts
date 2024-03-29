@@ -1,17 +1,9 @@
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 
 export const validationSchema = Joi.object({
   // ENV
-  // RUNTIME: Joi.string().valid('local', 'test', 'prod').required(),
   PORT: Joi.number().required(),
   SERVICE_NAME: Joi.string().required(),
-
-  // BACKEND
-  // BASE_URL: Joi.string().required(),
-
-  // SWAGGER
-  //   SWAGGER_ID: Joi.string().required(),
-  //   SWAGGER_PW: Joi.string().required(),
 
   // AUTH
   JWT_SECRET: Joi.string().required(),

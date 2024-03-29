@@ -1,17 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { validationSchema } from './config/validation.schema';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { CommonModule } from './common/common.module';
+import { validationSchema } from './config/validation.schema';
+import { PointModule } from './point/point.module';
+import { PaymentModule } from './payment/payment.module';
+import { CouponModule } from './coupon/coupon.module';
+import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env`,
       validationSchema,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -30,8 +35,21 @@ import { CommonModule } from './common/common.module';
         logging: true,
       }),
     }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<RedisModuleOptions> => ({
+        type: 'single',
+        url: configService.get<string>('REDIS_URL'),
+      }),
+    }),
     AuthModule,
-    CommonModule,
+    UserModule,
+    PointModule,
+    PaymentModule,
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [AppService],
